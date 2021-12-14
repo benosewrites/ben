@@ -28,36 +28,45 @@ navLinks.forEach((btn) =>
 	btn.addEventListener('click', closeMenu),
 );
 
-//Skills list toggle show
-const toggle = () => {
+//Open/Close skills list
+const toggleSkillsHeader = function () {
+	let clickedSkillsHeaderParentClass =
+		this.parentNode.className;
+	//Getting an array of all skills content class
+	const skillsContent =
+		document.getElementsByClassName(
+			'skills__content',
+		);
+	//Making sure all skill contents are closed
+	for (i = 0; i < skillsContent.length; i++) {
+		skillsContent[i].className =
+			'skills__content skills__close';
+	}
+	if (
+		clickedSkillsHeaderParentClass ===
+		'skills__content skills__close'
+	) {
+		this.parentNode.className =
+			'skills__content skills__open';
+	}
 	const toggleClass = document
 		.querySelector('.skills__content')
 		.classList.contains('skills__close');
-
-	if (toggleClass) {
-		document
-			.querySelector('.skills__content')
-			.classList.replace(
-				'skills__close',
-				'skills__open',
-			);
-	} else {
-		document
-			.querySelector('.skills__content')
-			.classList.replace(
-				'skills__open',
-				'skills__close',
-			);
-	}
 };
 
-document
-	.querySelector('.skills__header')
-	.addEventListener('click', toggle);
+const skillsHeader = document.querySelectorAll(
+	'.skills__header',
+);
+skillsHeader.forEach((skillheader) =>
+	skillheader.addEventListener(
+		'click',
+		toggleSkillsHeader,
+	),
+);
 
 ///////Skill list toggle show
-//get skills headers
-const skillHeaders = document.querySelectorAll(
+//get each skill header
+/**const skillHeaders = document.querySelectorAll(
 	'.skill-header',
 );
 
@@ -66,14 +75,15 @@ const skillData = document.getElementsByClassName(
 );
 
 const toggleSkill = function () {
-	//make sure all the skills are closed at initial state
+	//get and store the parentClass of the clicked item
 	let clickedItemParentClass =
 		this.parentNode.className;
+	console.log(clickedItemParentClass);
+	//make sure all the skills are closed at initial state
 	for (i = 0; i < skillData.length; i++) {
 		skillData[i].className =
 			'skill__data skill__close';
 	}
-	//get the parentClass of the clicked item
 
 	//open the clicked item
 	if (
@@ -91,11 +101,47 @@ skillHeaders.forEach((skillHeader) =>
 		'click',
 		toggleSkill,
 	),
+); */
+
+//New
+function toggle() {
+	const dataContents = document.querySelectorAll(
+		'[skill-data-content]',
+	);
+
+	// Get skill all skill header
+	skillHeaders.forEach((skillHeader) =>
+		skillHeader.classList.remove('active'),
+	);
+	const skillTarget = document.querySelector(
+		this.dataset.target,
+	);
+	const clickedItemDescriptionClass =
+		skillTarget.className;
+	for (i = 0; i < dataContents.length; i++) {
+		dataContents[i].className =
+			'skill__description skill__description-hide';
+	}
+
+	if (
+		clickedItemDescriptionClass ===
+		'skill__description skill__description-hide'
+	) {
+		skillTarget.className =
+			'skill__description skill__description-show';
+		this.classList.add('active');
+	}
+}
+const skillHeaders = document.querySelectorAll(
+	'.skill-header',
+);
+skillHeaders.forEach((skillHeader) =>
+	skillHeader.addEventListener('click', toggle),
 );
 
 //**Qualification tabs */
 const tabs = document.querySelectorAll(
-	'[data-target]',
+	'.qualification__button',
 );
 
 tabContents = document.querySelectorAll(
@@ -103,20 +149,25 @@ tabContents = document.querySelectorAll(
 );
 tabs.forEach((tab) => {
 	tab.addEventListener('click', () => {
+		//get targets // if you dig, tab.dataset.target is the the id of the content
 		const target = document.querySelector(
 			tab.dataset.target,
 		);
+		//First remove the qualiication active class from each content
 		tabContents.forEach((tabContent) => {
 			tabContent.classList.remove(
 				'qualification__active',
 			);
 		});
+		//add qualification active to the clicked tab's content
 		target.classList.add('qualification__active');
+		//Remove the qualiication active class from all tabs
 		tabs.forEach((tab) => {
 			tab.classList.remove(
 				'qualification__active',
 			);
 		});
+		//add qualification active to the clicked tab
 		tab.classList.add('qualification__active');
 	});
 });
