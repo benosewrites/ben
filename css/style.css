@@ -744,6 +744,7 @@ img {
 .portfolio__img {
 	border-radius: 0.5rem;
 	width: 265px;
+	height: 180px;
 	justify-self: center;
 }
 
